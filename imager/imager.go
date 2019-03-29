@@ -7,6 +7,7 @@ import (
 	"image/draw"
 	"image/png"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"os"
 	"time"
@@ -44,6 +45,73 @@ func Init() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func Clip(figure *image.RGBA) {
+	clipingTop("left", figure)
+	clipingTop("right", figure)
+	clipingBottom("left", figure)
+	clipingBottom("right", figure)
+	log.Println("Final")
+}
+func clipingBottom(flag string, figure *image.RGBA) {
+	p := 99
+	var x int
+	if flag == "left" {
+		x = 0
+	} else if flag == "right" {
+		x = 100
+	} else {
+		return
+	}
+	for i := x; i < x+101; i++ {
+		for j := 200; j > p+x; j-- {
+			// figure.Set(i, j, color.RGBA{255, 0, 155, 255})
+			figure.Set(i, j, color.Transparent)
+		}
+		if flag == "left" {
+			p++
+		} else {
+			p--
+		}
+	}
+}
+
+func clipingTop(flag string, figure *image.RGBA) {
+	var p, x int
+	if flag == "left" {
+		p = 0
+		x = 0
+	} else if flag == "right" {
+		p = 99
+		x = 100
+	} else {
+		return
+	}
+	for i := x; i < x+101; i++ {
+		for j := 100 - p; j > -1; j-- {
+			// figure.Set(i, j, color.RGBA{255, 0, 155, 255})
+			figure.Set(i, j, color.Transparent)
+		}
+		if flag == "left" {
+			p++
+		} else {
+			p--
+		}
+
+	}
+}
+
+func Base(c *gin.Context) {
+	basedTemplate := image.NewRGBA(image.Rect(0, 0, 200, 200))
+	draw.Draw(basedTemplate, basedTemplate.Bounds(), &image.Uniform{image.White}, image.ZP, draw.Src)
+	Clip(basedTemplate)
+	// clip := image.NewRGBA(image.Rect(0, 0, 100, 100))
+	// draw.Draw(clip, clip.Bounds(), &image.Uniform{color.RGBA{155, 155, 155, 0}}, image.ZP, draw.Src)
+	// draw.DrawMask(basedTemplate, basedTemplate.Bounds(), clip, image.Point{-50, -50}, basedTemplate, image.Point{0, 0}, draw.Src)
+	c.Writer.Header().Set("Content-Type", "image/png")
+	err := png.Encode(c.Writer, basedTemplate)
+	pan(err)
 }
 
 func Template() *image.RGBA {

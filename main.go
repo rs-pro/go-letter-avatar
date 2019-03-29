@@ -13,6 +13,7 @@ func main() {
 	r := gin.New()
 
 	r.GET("/test", imager.ImageMain)
+	r.GET("/try", imager.Base)
 	log.Println("listening on :3001")
 	err := http.ListenAndServe(":3001", r)
 	if err != nil {
