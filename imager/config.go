@@ -7,11 +7,11 @@ import (
 
 type Config struct {
 	Latters         string
-	LatterSize      uint8
+	LatterSize      int
 	LetterCollor    [4]uint8
 	BackgroundColor [4]uint8
-	ImageWidth      uint8
-	ImageHeight     uint8
+	ImageWidth      int
+	ImageHeight     int
 	NoRandValues    bool
 }
 
@@ -79,9 +79,9 @@ func (c *Config) emptyArray(flag string) bool {
 func (c *Config) letterSize() {
 	if c.LatterSize == 0 {
 		if c.ImageWidth > c.ImageHeight {
-			c.LatterSize = uint8(rand.Intn(int(float32(c.ImageHeight) * 0.55)))
+			c.LatterSize = rand.Intn(int(float32(c.ImageHeight) * 0.55))
 		} else {
-			c.LatterSize = uint8(rand.Intn(int(float32(c.ImageWidth) * 0.55)))
+			c.LatterSize = rand.Intn(int(float32(c.ImageWidth) * 0.55))
 		}
 	}
 }
@@ -93,16 +93,16 @@ func (c *Config) randomLetterSize() {
 
 func (c *Config) CheckEndSetImageSize() {
 	for c.ImageHeight < 1 {
-		c.ImageHeight = uint8(rand.Intn(7000))
+		c.ImageHeight = rand.Intn(7000)
 	}
 	for c.ImageWidth < c.ImageHeight {
-		c.ImageWidth = uint8(rand.Intn(7000))
+		c.ImageWidth = rand.Intn(7000)
 	}
 }
 func (c *Config) randomImageSize() {
-	c.ImageHeight = 0
-	c.ImageWidth = 0
-	c.CheckEndSetImageSize()
+	c.ImageHeight = 400
+	c.ImageWidth = 600
+	// c.CheckEndSetImageSize()
 }
 
 func (c *Config) randomBG() {
