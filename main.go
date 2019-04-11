@@ -11,7 +11,9 @@ import (
 
 func main() {
 	r := gin.New()
-
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, "Welcome to the generator of letters")
+	})
 	r.GET("/test", imager.ImageMain)
 	r.GET("/try", imager.Base)
 	log.Println("listening on :3001")
