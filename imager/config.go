@@ -13,6 +13,7 @@ type Config struct {
 	ImageWidth      int
 	ImageHeight     int
 	NoRandValues    bool
+	Rounding        int
 }
 
 func (c *Config) ValidDatas() {
@@ -89,6 +90,16 @@ func (c *Config) letterSize() {
 func (c *Config) randomLetterSize() {
 	c.LatterSize = 0
 	c.letterSize()
+}
+
+func (c *Config) randomRounding() {
+	for c.Rounding < 1 {
+		if c.ImageWidth > 0 {
+			c.Rounding = rand.Intn(c.ImageWidth)
+		} else {
+			c.Rounding = rand.Intn(100)
+		}
+	}
 }
 
 func (c *Config) CheckEndSetImageSize() {
