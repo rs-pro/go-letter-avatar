@@ -1,15 +1,12 @@
 package main
 
 import (
-	"bufio"
-	"image"
 	"image/png"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-letter-avatar/imager"
+	"github.com/rs-pro/go-letter-avatar/imager"
 )
 
 func main() {
@@ -22,33 +19,15 @@ func main() {
 		img := imager.Template()
 		c.Writer.Header().Set("Content-Type", "image/png")
 		err := png.Encode(c.Writer, img)
-		pan(err)
-		err = saveToDisk(img, "test.png")
-		pan(err)
+		if err != nil {
+			panic(err)
+		}
 	})
 	log.Println("listening on :3001")
 	err := http.ListenAndServe(":3001", r)
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func saveToDisk(img *image.RGBA, filename string) error {
-	outFile, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer outFile.Close()
-	b := bufio.NewWriter(outFile)
-	err = png.Encode(b, img)
-	if err != nil {
-		return err
-	}
-	err = b.Flush()
-	if err != nil {
-		panic(err)
-	}
-	return nil
 }
 
 func pan(err error) {
