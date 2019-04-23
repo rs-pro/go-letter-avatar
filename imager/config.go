@@ -78,56 +78,24 @@ func (c *Config) emptyArray(flag string) bool {
 }
 
 func (c *Config) letterSize() {
-	if c.LatterSize == 0 {
-		if c.ImageWidth > c.ImageHeight {
-			c.LatterSize = rand.Intn(int(float32(c.ImageHeight) * 0.55))
-		} else {
-			c.LatterSize = rand.Intn(int(float32(c.ImageWidth) * 0.55))
-		}
-	}
-}
-
-func (c *Config) randomLetterSize() {
-	c.LatterSize = 0
-	c.letterSize()
-}
-
-func (c *Config) randomRounding() {
-	for c.Rounding < 1 {
-		if c.ImageWidth > 0 {
-			c.Rounding = rand.Intn(c.ImageWidth)
-		} else {
-			c.Rounding = rand.Intn(100)
-		}
+	min := min(c.ImageWidth, c.ImageHeight)
+	if c.LatterSize == 0 && min > 0 {
+		c.LatterSize = rand.Intn(int(float32(min) * 0.55))
 	}
 }
 
 func (c *Config) CheckEndSetImageSize() {
+	for c.ImageWidth < 1 {
+		c.ImageWidth = rand.Intn(1024)
+	}
 	for c.ImageHeight < 1 {
-		c.ImageHeight = rand.Intn(7000)
-	}
-	for c.ImageWidth < c.ImageHeight {
-		c.ImageWidth = rand.Intn(7000)
+		c.ImageHeight = rand.Intn(768)
 	}
 }
-func (c *Config) randomImageSize() {
-	c.ImageHeight = 400
-	c.ImageWidth = 600
-	// c.CheckEndSetImageSize()
-}
 
-func (c *Config) randomBG() {
-	c.BackgroundColor = [4]uint8{uint8(rand.Intn(255)), uint8(rand.Intn(256)), uint8(rand.Intn(256)), uint8(255)}
-}
-
-func (c *Config) randomLC() {
-	c.LetterCollor = [4]uint8{uint8(rand.Intn(255)), uint8(rand.Intn(256)), uint8(rand.Intn(256)), uint8(255)}
-}
-
-func (c *Config) randomLettars() {
-	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ")
-	c.Latters = string(letter[rand.Intn(len(letter))]) + string(letter[rand.Intn(len(letter))])
-	if len([]rune(c.Latters)) < 2 {
-		c.randomLettars()
+func min(first, second int) int {
+	if first > second {
+		return second
 	}
+	return first
 }
