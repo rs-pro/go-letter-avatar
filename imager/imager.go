@@ -27,7 +27,7 @@ func Init() {
 	} else {
 		config.RandomDatas()
 	}
-	fontBytes, err := ioutil.ReadFile("./fonts/kievit-bold.ttf")
+	fontBytes, err := ioutil.ReadFile("./fonts/Roboto-Regular.ttf")
 	if err != nil {
 		panic(err)
 	}
