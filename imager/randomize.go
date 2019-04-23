@@ -2,8 +2,18 @@ package imager
 
 import "math/rand"
 
+func (c *Config) RandomDatas() {
+	c.randomLettars()
+	c.randomBG()
+	c.randomLC()
+	c.similarColors()
+	c.randomImageSize()
+	c.randomLetterSize()
+	c.randomRounding()
+}
+
 func (c *Config) randomLetterSize() {
-	c.LatterSize = 0
+	c.LetterSize = 0
 	c.letterSize()
 }
 
@@ -25,13 +35,13 @@ func (c *Config) randomBG() {
 }
 
 func (c *Config) randomLC() {
-	c.LetterCollor = [4]uint8{uint8(rand.Intn(255)), uint8(rand.Intn(256)), uint8(rand.Intn(256)), uint8(255)}
+	c.LetterColor = [4]uint8{uint8(rand.Intn(255)), uint8(rand.Intn(256)), uint8(rand.Intn(256)), uint8(255)}
 }
 
 func (c *Config) randomLettars() {
 	var letter = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ")
-	c.Latters = string(letter[rand.Intn(len(letter))]) + string(letter[rand.Intn(len(letter))])
-	if len([]rune(c.Latters)) < 2 {
+	c.Letters = string(letter[rand.Intn(len(letter))]) + string(letter[rand.Intn(len(letter))])
+	if len([]rune(c.Letters)) < 2 {
 		c.randomLettars()
 	}
 }
