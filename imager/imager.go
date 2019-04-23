@@ -25,13 +25,7 @@ func Init() {
 	if config.NoRandValues {
 		config.ValidDatas()
 	} else {
-		config.randomLettars()
-		config.randomBG()
-		config.randomLC()
-		config.similarColors()
-		config.randomImageSize()
-		config.randomLetterSize()
-		config.randomRounding()
+		config.RandomDatas()
 	}
 	fontBytes, err := ioutil.ReadFile("./fonts/kievit-bold.ttf")
 	if err != nil {
@@ -58,17 +52,17 @@ func Template() *image.RGBA {
 		config.BackgroundColor[2],
 		config.BackgroundColor[3]}
 
-	textColor := color.RGBA{config.LetterCollor[0],
-		config.LetterCollor[1],
-		config.LetterCollor[2],
-		config.LetterCollor[3]}
+	textColor := color.RGBA{config.LetterColor[0],
+		config.LetterColor[1],
+		config.LetterColor[2],
+		config.LetterColor[3]}
 
 	template := image.NewRGBA(image.Rect(0, 0, int(config.ImageWidth), int(config.ImageHeight)))
 
 	draw.Draw(template, template.Bounds(), &image.Uniform{bgColor}, image.ZP, draw.Src)
 
 	face := truetype.NewFace(fBold, &truetype.Options{
-		Size:    float64(config.LatterSize),
+		Size:    float64(config.LetterSize),
 		DPI:     72,
 		Hinting: font.HintingFull,
 	})
@@ -79,7 +73,7 @@ func Template() *image.RGBA {
 		Face: face,
 	}
 
-	a, _ := d.BoundString(config.Latters)
+	a, _ := d.BoundString(config.Letters)
 	w = a.Max.X - a.Min.X
 	h = a.Max.Y - a.Min.Y
 
@@ -100,7 +94,7 @@ func Template() *image.RGBA {
 		Y: dotY + height,
 	}
 
-	d.DrawString(config.Latters)
+	d.DrawString(config.Letters)
 	rounding(template)
 
 	return template
@@ -217,13 +211,3 @@ func clippingRight(figure *image.RGBA) {
 		}
 	}
 }
-
-// func ImageMain(c *gin.Context) {
-// 	Init()
-// 	img = Template()
-// 	c.Writer.Header().Set("Content-Type", "image/png")
-// 	err := png.Encode(c.Writer, img)
-// 	pan(err)
-// 	err = saveToDisk(img, "test.png")
-// 	pan(err)
-// }
